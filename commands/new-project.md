@@ -1069,8 +1069,105 @@ reset-dev:
 
 Include only the variant that matches Q2; remove the commented-out alternatives.
 
-**`.gitignore`** — standard .NET + Node + SQLite entries:
-bin/, obj/, node_modules/, dist/, *.db, *.db-shm, *.db-wal, .env, wwwroot/
+**`.gitignore`** — two paths depending on whether the user is using the default stack.
+
+#### Default stack (.NET + Vue + Vite)
+
+If the scaffold being created uses the standard stack (C# backend + Vue 3 frontend), generate
+the file inline. Apply only the sections that match the Q answers:
+
+```gitignore
+# ── .NET ──────────────────────────────────────────────
+bin/
+obj/
+*.user
+.vs/
+*.suo
+*.sln.docstates
+
+# ── Frontend (Vue + Vite) ─────────────────────────────
+node_modules/
+dist/
+.vite/
+wwwroot/
+
+# ── Environment / secrets ─────────────────────────────
+.env
+.env.local
+.env.*.local
+
+# ── Logs (include if Q10 = File or Both) ─────────────
+logs/
+*.log
+
+# ── Database (Q2 = SQLite only — omit for PostgreSQL / MySQL) ──
+*.db
+*.db-shm
+*.db-wal
+
+# ── Docker (include if Q5 = Docker or Both) ───────────
+docker-compose.override.yml
+
+# ── OS artefacts ──────────────────────────────────────
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# ── IDE ───────────────────────────────────────────────
+.idea/
+# .vscode/   ← keep commented if the team shares launch.json / settings
+```
+
+Rules for inline generation:
+- Always include: .NET, Frontend, Environment, OS, IDE sections.
+- Include Logs section only if Q10 = File or Both.
+- Include `*.db / *.db-shm / *.db-wal` only if Q2 = SQLite.
+- Include `docker-compose.override.yml` only if Q5 = Docker or Both.
+- Keep `.vscode/` commented — teams often commit shared VS Code settings.
+
+#### Non-default stack
+
+If the user has indicated a different backend language, frontend framework, or runtime
+(e.g., Go, Node/Express, React, Svelte, Django, etc.), do **not** write the inline block above.
+Instead, present this step as a recommended action before the git init:
+
+    Recommended: generate a tailored .gitignore for your stack.
+
+    I will fetch one from gitignore.io using the keywords that match your choices.
+    Confirm the stack components below — add or remove any before I fetch:
+
+      Keywords: {comma-separated list derived from the user's stack, e.g. "go,node,react,postgresql"}
+
+    Type YES to fetch with these keywords, edit the list, or SKIP to handle it yourself.
+
+If the user confirms, fetch the file via the WebFetch tool:
+
+    URL: https://www.toptal.com/developers/gitignore/api/{keywords}
+
+Write the response body directly to `.gitignore`. Then append a short project-specific block
+at the bottom for anything gitignore.io does not cover (e.g., local DB files if Q2=SQLite,
+`logs/` if Q10=File or Both, any app-specific build output paths).
+
+Keyword mapping reference (derive from stack choices, not an exhaustive list):
+| Stack component | gitignore.io keyword(s) |
+|---|---|
+| C# / .NET | `dotnet` |
+| Go | `go` |
+| Node / npm | `node` |
+| Python | `python` |
+| Vue | `vue` |
+| React | `react` |
+| Svelte | `svelte` |
+| Angular | `angular` |
+| SQLite | `sqlite` |
+| PostgreSQL | `postgresql` |
+| MySQL | `mysql` |
+| Docker | `docker` |
+| macOS | `macos` |
+| Windows | `windows` |
+| Linux | `linux` |
+| JetBrains IDEs | `jetbrains` |
+| VS Code | `visualstudiocode` |
 
 After creating all files, tell the user:
 ```
