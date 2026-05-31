@@ -2,6 +2,8 @@
 
 Personal Claude Code global configuration — commands and skills available across all projects.
 
+[Español](README.es.md)
+
 ## Commands
 
 Slash commands available as `/command-name` in any Claude Code session.
